@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  linesalepos-db:
+    image: postgres:16-alpine
+    container_name: linesalepos-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: linesalepos
+      POSTGRES_PASSWORD: linesalepos_secret
+      POSTGRES_DB: linesalepos
+    ports:
+      - "5440:5432"
+    volumes:
+      - linesalepos_pgdata:/var/lib/postgresql/data
+      - ./backend/migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U linesalepos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  linesalepos_pgdata:
+    name: linesalepos_pgdata
