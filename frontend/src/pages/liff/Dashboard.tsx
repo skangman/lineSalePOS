@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { getMe, getDashboard } from '../../api/client'
 import BottomNav from '../../components/BottomNav'
-import PosIcon from '../../components/PosIcon'
 import type { DashboardSummary } from '../../types'
 
 export default function Dashboard() {
@@ -18,7 +17,7 @@ export default function Dashboard() {
     async function load() {
       try {
         const { shop } = await getMe()
-        if (!shop) { setHasShop(false); setLoading(false); return }
+        if (!shop) { setHasShop(false); setLoading(false); navigate('/liff/register', { replace: true }); return }
         setHasShop(true)
         setShopName(shop.shop_name)
 
@@ -28,6 +27,7 @@ export default function Dashboard() {
       } catch (err: any) {
         if (err.message?.includes('ไม่พบร้านค้า') || err.message?.includes('สมัครร้าน')) {
           setHasShop(false)
+          navigate('/liff/register', { replace: true })
         } else {
           toast.error(err.message)
         }
@@ -50,18 +50,13 @@ export default function Dashboard() {
   }
 
   if (hasShop === false) {
+    // เด้งไปฟอร์มสมัครร้านทันที (ดู navigate('/liff/register') ด้านบน) — โชว์แค่ spinner ระหว่างรอเปลี่ยนหน้า
     return (
-      <div className="min-h-screen bg-gradient-to-b from-line-green to-line-dark flex flex-col items-center justify-center p-6">
-        <PosIcon className="w-20 h-20 mb-4" />
-        <h1 className="text-white text-2xl font-bold text-center mb-2">LINE Sale POS</h1>
-        <p className="text-green-100 text-center mb-8">สร้าง QR พร้อมเพย์ รับเงิน จัดการร้าน — ง่ายๆ ผ่าน LINE</p>
-        <button
-          onClick={() => navigate('/liff/register')}
-          className="bg-white text-line-green font-bold text-lg px-8 py-4 rounded-2xl shadow-lg w-full max-w-xs active:scale-95 transition-transform"
-        >
-          🏪 สมัครร้านค้าฟรี
-        </button>
-        <p className="text-green-100 text-sm mt-4">ไม่ต้องติดตั้งแอปเพิ่ม ใช้งานได้เลย</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-line-green border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          <p className="text-gray-500">กำลังโหลด...</p>
+        </div>
       </div>
     )
   }
