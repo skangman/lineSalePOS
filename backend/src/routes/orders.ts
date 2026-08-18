@@ -213,7 +213,8 @@ router.post('/:id/cancel', authMiddleware, shopMiddleware, async (req, res) => {
     // Notify LINE
     const shop = await queryOne('SELECT * FROM shops WHERE id=$1', [req.shopId])
     if (shop?.line_notify_enabled) {
-      pushMessage(req.user!.line_user_id, [buildCancelMessage({ orderNo: order.order_no, total: order.total, reason: cancel_reason })]).catch(() => {})
+      // pg คืน NUMERIC เป็น string — ต้อง Number() ก่อนส่งเข้า buildCancelMessage ไม่งั้น .toFixed() พัง
+      pushMessage(req.user!.line_user_id, [buildCancelMessage({ orderNo: order.order_no, total: Number(order.total), reason: cancel_reason })]).catch(() => {})
     }
 
     res.json({ success: true })

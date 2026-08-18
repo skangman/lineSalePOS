@@ -38,7 +38,7 @@ export default function AdminSettings() {
 
   return (
     <AdminLayout title="ตั้งค่า">
-      <div className="space-y-3 max-w-md">
+      <div className="space-y-3 max-w-md mx-auto">
 
         {/* Theme */}
         <div className={`${card} p-5`}>

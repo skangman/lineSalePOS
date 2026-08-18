@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useLiff } from './hooks/useLiff'
+import PosIcon from './components/PosIcon'
 
 // Redirect root → /liff/dashboard แต่เก็บ query params ไว้ด้วย (LIFF ต้องการ ?code=)
 function RootRedirect() {
@@ -19,9 +20,10 @@ import Debts from './pages/liff/Debts'
 import OrderDetail from './pages/liff/OrderDetail'
 import DailyReport from './pages/liff/DailyReport'
 import Stock from './pages/liff/Stock'
-import Staff from './pages/liff/Staff'
+// import Staff from './pages/liff/Staff' // ปิดใช้งานฟีเจอร์จัดการพนักงานชั่วคราว — แทนที่ด้วย Profile เจ้าของในหน้า Settings
 import Plans from './pages/liff/Plans'
 import Settings from './pages/liff/Settings'
+import Profile from './pages/liff/Profile'
 
 // Admin pages
 import AdminLogin from './pages/admin/AdminLogin'
@@ -33,7 +35,7 @@ import AdminSettings from './pages/admin/AdminSettings'
 import { AdminThemeProvider } from './context/AdminThemeContext'
 
 function LiffGuard({ children }: { children: React.ReactNode }) {
-  const { isReady, isLoggedIn, error } = useLiff()
+  const { isReady, isLoggedIn, error, login } = useLiff()
 
   if (!isReady) {
     return (
@@ -57,7 +59,21 @@ function LiffGuard({ children }: { children: React.ReactNode }) {
     )
   }
 
-  if (!isLoggedIn) return null
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-line-green to-line-dark flex flex-col items-center justify-center p-6">
+        <PosIcon className="w-20 h-20 mb-4" />
+        <h1 className="text-white text-2xl font-bold text-center mb-2">LINE Sale POS</h1>
+        <p className="text-green-100 text-center mb-8">สมัครใช้งานหรือเข้าสู่ระบบด้วยบัญชี LINE เพื่อเริ่มใช้งาน</p>
+        <button
+          onClick={login}
+          className="bg-white text-line-green font-bold text-lg px-8 py-4 rounded-2xl shadow-lg w-full max-w-xs active:scale-95 transition-transform"
+        >
+          🟢 เข้าสู่ระบบด้วย LINE
+        </button>
+      </div>
+    )
+  }
 
   return <>{children}</>
 }
@@ -83,7 +99,8 @@ export default function App() {
               <Route path="orders/:id" element={<OrderDetail />} />
               <Route path="reports/daily" element={<DailyReport />} />
               <Route path="stock" element={<Stock />} />
-              <Route path="staff" element={<Staff />} />
+              {/* <Route path="staff" element={<Staff />} /> ปิดใช้งานคู่กับ import ด้านบน */}
+              <Route path="profile" element={<Profile />} />
               <Route path="plans" element={<Plans />} />
               <Route path="settings" element={<Settings />} />
             </Routes>

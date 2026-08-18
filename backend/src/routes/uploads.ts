@@ -30,10 +30,13 @@ router.post('/image', authMiddleware, shopMiddleware, upload.single('image'), as
     const filename = `${randomUUID()}.webp`
     const outputPath = path.join(UPLOAD_DIR, filename)
 
-    // Resize ไม่เกิน 800x800 + แปลงเป็น webp คุณภาพ 80%
+    // รูปสินค้าในแอปแสดงใหญ่สุดแค่ ~192px (ฟอร์มเพิ่มสินค้า) — 640px ก็เกินพอสำหรับจอ retina 2x แล้ว
+    // ไฟล์เล็กลง ~35% จากเดิม (800px) โดยที่ยังคมสมเหตุผลสำหรับขนาดที่แสดงจริง
+    // sharpen ช่วยชดเชยความฟุ้ง (blur) ที่เกิดจากการบีบอัด webp คุณภาพต่ำลง
     await sharp(req.file.buffer)
-      .resize(800, 800, { fit: 'inside', withoutEnlargement: true })
-      .webp({ quality: 80 })
+      .resize(640, 640, { fit: 'inside', withoutEnlargement: true })
+      .sharpen({ sigma: 0.6 })
+      .webp({ quality: 75 })
       .toFile(outputPath)
 
     res.json({ url: `/uploads/${filename}` })

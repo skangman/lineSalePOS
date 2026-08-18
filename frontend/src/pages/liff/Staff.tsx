@@ -1,3 +1,4 @@
+// ⚠️ ปิดใช้งานฟีเจอร์นี้ชั่วคราว — ไม่ได้ผูก route แล้ว (ดู App.tsx) เก็บไฟล์ไว้เผื่อกลับมาใช้ทีหลัง
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import Layout from '../../components/Layout'

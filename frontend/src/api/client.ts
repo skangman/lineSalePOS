@@ -1,15 +1,19 @@
 import axios from 'axios'
 
-// แปลง image_url เก่า (http://localhost:3100/uploads/...) → /uploads/...
+// ตอน deploy จริง ตั้ง VITE_API_URL เป็น origin ของ backend เช่น https://your-backend.onrender.com
+// (dev ปล่อยว่างไว้ ใช้ vite proxy แทน)
+const API_ORIGIN = (import.meta as any).env?.VITE_API_URL || ''
+
+// แปลง image_url เก่า (http://localhost:3100/uploads/...) → เต็ม URL ของ backend ปัจจุบัน
 export function imgUrl(url?: string | null): string | undefined {
   if (!url) return undefined
-  if (url.startsWith('/uploads/')) return url
+  if (url.startsWith('/uploads/')) return `${API_ORIGIN}${url}`
   const match = url.match(/\/uploads\/.+/)
-  return match ? match[0] : url
+  return match ? `${API_ORIGIN}${match[0]}` : url
 }
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: `${API_ORIGIN}/api`,
   timeout: 15000,
 })
 

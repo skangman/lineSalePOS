@@ -1,3 +1,4 @@
+// ⚠️ ปิดใช้งานฟีเจอร์นี้ชั่วคราว — ไม่ได้ mount เข้า app แล้ว (ดู index.ts) เก็บโค้ดไว้เผื่อกลับมาใช้ทีหลัง
 import { Router } from 'express'
 import { authMiddleware, shopMiddleware, requireRole } from '../middleware/auth.js'
 import { query, queryOne } from '../config/db.js'

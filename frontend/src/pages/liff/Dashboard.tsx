@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { getMe, getDashboard } from '../../api/client'
 import BottomNav from '../../components/BottomNav'
+import PosIcon from '../../components/PosIcon'
 import type { DashboardSummary } from '../../types'
 
 export default function Dashboard() {
@@ -51,7 +52,7 @@ export default function Dashboard() {
   if (hasShop === false) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-line-green to-line-dark flex flex-col items-center justify-center p-6">
-        <div className="text-6xl mb-4">🏪</div>
+        <PosIcon className="w-20 h-20 mb-4" />
         <h1 className="text-white text-2xl font-bold text-center mb-2">LINE Sale POS</h1>
         <p className="text-green-100 text-center mb-8">สร้าง QR พร้อมเพย์ รับเงิน จัดการร้าน — ง่ายๆ ผ่าน LINE</p>
         <button
@@ -134,7 +135,7 @@ export default function Dashboard() {
         {topProducts.length > 0 && (
           <div className="bg-white rounded-2xl shadow-md p-4 mb-4">
             <h2 className="font-bold text-gray-800 mb-3">🔥 สินค้าขายดีวันนี้</h2>
-            <div className="md:grid md:grid-cols-2 md:gap-x-6">
+            <div className={topProducts.length > 1 ? 'md:grid md:grid-cols-2 md:gap-x-6' : ''}>
               {topProducts.map((p, i) => (
                 <div key={p.product_name} className="flex items-center justify-between py-2 border-b last:border-0 md:last:border-0">
                   <div className="flex items-center gap-2">

@@ -13,7 +13,7 @@ import orderRoutes from './routes/orders.js'
 import reportRoutes from './routes/reports.js'
 import stockRoutes from './routes/stock.js'
 import receiptRoutes from './routes/receipts.js'
-import staffRoutes from './routes/staff.js'
+// import staffRoutes from './routes/staff.js' // ปิดใช้งานฟีเจอร์จัดการพนักงานชั่วคราว — ร้านเดี่ยวใช้แค่เจ้าของบัญชี ไม่ต้องเชิญพนักงาน
 import settingsRoutes from './routes/settings.js'
 import debtRoutes from './routes/debts.js'
 import lineRoutes from './routes/line.js'
@@ -25,14 +25,20 @@ const app = express()
 const PORT = process.env.PORT || 3100
 
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }))
+// FRONTEND_URL รับได้หลายโดเมนคั่นด้วย , (เช่น production + preview)
 const allowedOrigins = [
   'http://localhost:5174',
-  process.env.FRONTEND_URL,
+  ...(process.env.FRONTEND_URL || '').split(',').map((s) => s.trim()),
 ].filter(Boolean)
 
 app.use(cors({
   origin: (origin, cb) => {
-    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.trycloudflare.com')) {
+    if (
+      !origin ||
+      allowedOrigins.includes(origin) ||
+      origin.endsWith('.trycloudflare.com') ||
+      origin.endsWith('.vercel.app')
+    ) {
       cb(null, true)
     } else {
       cb(new Error('Not allowed by CORS'))
@@ -59,7 +65,7 @@ app.use('/api/orders', orderRoutes)
 app.use('/api/reports', reportRoutes)
 app.use('/api/stock', stockRoutes)
 app.use('/api/receipts', receiptRoutes)
-app.use('/api/staff', staffRoutes)
+// app.use('/api/staff', staffRoutes) // ปิดใช้งานคู่กับ import ด้านบน
 app.use('/api/settings', settingsRoutes)
 app.use('/api/debts', debtRoutes)
 app.use('/api/line', lineRoutes)

@@ -7,15 +7,27 @@ interface LiffState {
   isLoggedIn: boolean
   profile: Profile | null
   error: string | null
+  login: () => void
 }
 
 const LIFF_ID = (import.meta as any).env?.VITE_LIFF_ID || ''
 const IS_LOCALHOST =
   typeof window !== 'undefined' &&
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+const IS_DEV_LIFF_MODE = !LIFF_ID || IS_LOCALHOST
+
+// เรียกจากปุ่ม "เข้าสู่ระบบด้วย LINE" — โหมดจริงเด้งไป LINE login, โหมด dev จำลอง login ใหม่
+function login() {
+  if (IS_DEV_LIFF_MODE) {
+    sessionStorage.removeItem('dev_logged_out')
+    window.location.reload()
+  } else {
+    liff.login()
+  }
+}
 
 export function useLiff() {
-  const [state, setState] = useState<LiffState>({
+  const [state, setState] = useState<Omit<LiffState, 'login'>>({
     isReady: false,
     isLoggedIn: false,
     profile: null,
@@ -27,6 +39,12 @@ export function useLiff() {
       try {
         // Dev mode เมื่อไม่มี LIFF_ID หรือเปิดจาก localhost
         if (!LIFF_ID || IS_LOCALHOST) {
+          // กด logout ไว้ในแท็บนี้ → อยู่เฉยๆ ไม่ mock login ให้ใหม่ (เปิดแท็บใหม่/รีสตาร์ทเบราว์เซอร์ค่อย login ใหม่)
+          if (sessionStorage.getItem('dev_logged_out') === 'true') {
+            setState({ isReady: true, isLoggedIn: false, profile: null, error: null })
+            return
+          }
+
           const mockProfile = {
             userId: localStorage.getItem('line_user_id') || 'U_dev_test_001',
             displayName: 'ทดสอบ Dev',
@@ -39,11 +57,12 @@ export function useLiff() {
           return
         }
 
-        // Real LIFF mode
-        await liff.init({ liffId: LIFF_ID, withLoginOnExternalBrowser: true })
+        // Real LIFF mode — ไม่ auto-login ทันที เพื่อให้เจอหน้า "เข้าสู่ระบบด้วย LINE" ก่อนเสมอ
+        // (เปิดจากในแอป LINE ถือว่า login อยู่แล้ว ข้ามหน้านี้ไปเลย)
+        await liff.init({ liffId: LIFF_ID })
 
         if (!liff.isLoggedIn()) {
-          liff.login()
+          setState({ isReady: true, isLoggedIn: false, profile: null, error: null })
           return
         }
 
@@ -75,5 +94,5 @@ export function useLiff() {
     init()
   }, [])
 
-  return state
+  return { ...state, login }
 }

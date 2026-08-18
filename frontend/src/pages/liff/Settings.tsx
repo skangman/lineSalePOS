@@ -156,7 +156,8 @@ export default function Settings() {
             { label: '📦 จัดการสินค้า', path: '/liff/products' },
             { label: '🗂 จัดการหมวดหมู่', path: '/liff/categories' },
             { label: '📦 จัดการสต๊อก', path: '/liff/stock' },
-            { label: '👥 จัดการพนักงาน', path: '/liff/staff' },
+            // เดิม "👥 จัดการพนักงาน" ไป /liff/staff — ปิดฟีเจอร์นี้ชั่วคราว แทนด้วย Profile เจ้าของ
+            { label: '👤 Profile เจ้าของ', path: '/liff/profile' },
             { label: '💎 แพ็คเกจของฉัน', path: '/liff/plans' },
           ].map(({ label, path }) => (
             <button key={path} onClick={() => navigate(path)} className="w-full text-left py-3 border-b last:border-0 text-gray-700 font-medium flex justify-between items-center">
@@ -171,7 +172,8 @@ export default function Settings() {
           onClick={() => {
             if (!confirm('ออกจากระบบ?')) return
             localStorage.clear()
-            window.location.href = '/liff/home'
+            sessionStorage.setItem('dev_logged_out', 'true') // กันโหมด dev (localhost) auto login ตัวเองกลับ
+            window.location.href = '/liff/dashboard'
           }}
           className="w-full py-4 rounded-2xl border-2 border-red-300 text-red-500 font-bold active:bg-red-50"
         >

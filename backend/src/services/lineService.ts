@@ -48,13 +48,16 @@ export function buildSaleMessage(params: {
 
   const now = new Date().toLocaleString('th-TH', {
     timeZone: 'Asia/Bangkok',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
   })
 
   return {
     type: 'text',
-    text: `✅ รับเงินแล้ว\n\nบิล: ${orderNo}\nยอดขาย: ${total.toFixed(0)} บาท\nช่องทาง: ${methodLabel[paymentMethod] || paymentMethod}\nเวลา: ${now}\n\nรายการ:\n${itemLines}${extra}\n\n💰 รวม ${total.toFixed(0)} บาท`,
+    text: `✅ รับเงินแล้ว\n\nบิล: ${orderNo}\nยอดขาย: ${total.toFixed(0)} บาท\nช่องทาง: ${methodLabel[paymentMethod] || paymentMethod}\nวันที่/เวลา: ${now}\n\nรายการ:\n${itemLines}${extra}\n\n💰 รวม ${total.toFixed(0)} บาท`,
   }
 }
 
@@ -70,9 +73,18 @@ export function buildCancelMessage(params: {
   total: number
   reason: string
 }): line.messagingApi.TextMessage {
+  const now = new Date().toLocaleString('th-TH', {
+    timeZone: 'Asia/Bangkok',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+
   return {
     type: 'text',
-    text: `❌ ยกเลิกบิลแล้ว\n\nบิล: ${params.orderNo}\nยอด: ${params.total.toFixed(0)} บาท\nเหตุผล: ${params.reason}`,
+    text: `❌ ยกเลิกบิลแล้ว\n\nบิล: ${params.orderNo}\nยอด: ${params.total.toFixed(0)} บาท\nวันที่/เวลา: ${now}\nเหตุผล: ${params.reason}`,
   }
 }
 

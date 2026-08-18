@@ -59,8 +59,8 @@ export default function BottomNav() {
 
   return (
     <>
-      {/* Mobile: bottom tab bar */}
-      <nav className="md:hidden bg-white border-t border-gray-200 flex-shrink-0">
+      {/* Mobile: bottom tab bar — ต้องลอยค้างล่างจอเสมอ (ทุกหน้าเผื่อ pb-16/pb-40 ไว้รับพื้นที่นี้แล้ว) */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200">
         <div className="flex" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
           {NAV_ITEMS.map(({ path, label, icon }) => {
             const active = isActive(path)

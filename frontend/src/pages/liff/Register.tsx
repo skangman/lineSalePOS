@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { registerShop } from '../../api/client'
+import PosIcon from '../../components/PosIcon'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -43,7 +44,7 @@ export default function Register() {
     <div className="min-h-screen bg-gradient-to-b from-line-green to-line-dark flex flex-col">
       {/* Header */}
       <div className="text-white text-center pt-12 pb-8 px-6">
-        <div className="text-5xl mb-3">🏪</div>
+        <PosIcon className="w-16 h-16 mb-3 mx-auto" />
         <h1 className="text-2xl font-bold">สมัครร้านค้า</h1>
         <p className="text-green-100 mt-1">เริ่มขายของผ่าน LINE ได้เลย</p>
       </div>
