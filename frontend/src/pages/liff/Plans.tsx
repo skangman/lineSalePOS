@@ -127,6 +127,8 @@ export default function Plans() {
 
         {plans.map((plan) => {
           const isCurrent = plan.slug === currentSlug
+          const currentPlan = plans.find((p) => p.slug === currentSlug)
+          const isLowerThanCurrent = !!currentPlan && Number(plan.price) < Number(currentPlan.price)
           return (
             <div key={plan.id} className={`rounded-2xl border-2 p-5 ${PLAN_COLOR[plan.slug] || 'border-gray-200 bg-white'} ${isCurrent ? 'ring-2 ring-offset-1 ring-line-green' : ''}`}>
               <div className="flex justify-between items-start mb-3">
@@ -154,7 +156,9 @@ export default function Plans() {
 
               {isCurrent ? (
                 <div className="w-full py-3 rounded-xl bg-gray-100 text-center text-gray-500 font-medium text-sm">ใช้งานอยู่</div>
-              ) : Number(plan.price) === 0 ? null : (
+              ) : Number(plan.price) === 0 ? null : isLowerThanCurrent ? (
+                <div className="w-full py-3 rounded-xl bg-gray-100 text-center text-gray-400 font-medium text-sm">ต่ำกว่าแพ็คเกจปัจจุบัน</div>
+              ) : (
                 <button
                   onClick={() => setSelectedPlan(plan)}
                   className={`w-full py-3 rounded-xl text-white font-bold text-sm active:opacity-80 ${PLAN_BTN[plan.slug] || 'bg-gray-500'}`}
