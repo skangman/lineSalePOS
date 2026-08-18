@@ -34,6 +34,9 @@ import AdminUpgrades from './pages/admin/AdminUpgrades'
 import AdminSettings from './pages/admin/AdminSettings'
 import { AdminThemeProvider } from './context/AdminThemeContext'
 
+// หน้า public ไม่ต้อง login — ไม่ผูก link จากเมนูไหนในแอป
+import Privacy from './pages/Privacy'
+
 function LiffGuard({ children }: { children: React.ReactNode }) {
   const { isReady, isLoggedIn, error, login } = useLiff()
 
@@ -121,6 +124,9 @@ export default function App() {
           </Routes>
         </AdminThemeProvider>
       } />
+
+      {/* หน้า public — ไม่ต้อง login, ไม่มี link จากเมนูไหนในแอป */}
+      <Route path="/privacy" element={<Privacy />} />
 
       {/* Default redirect — ต้องเก็บ ?code= ไว้ให้ LIFF ประมวลผล */}
       <Route path="/" element={<RootRedirect />} />
