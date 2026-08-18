@@ -147,7 +147,6 @@ export default function Plans() {
               <div className="space-y-1.5 mb-4">
                 {feat(plan.max_products === -1 ? true : plan.max_products, `สินค้า ${plan.max_products === -1 ? 'ไม่จำกัด' : `สูงสุด ${plan.max_products} รายการ`}`)}
                 {feat(plan.max_orders_per_day === -1 ? true : plan.max_orders_per_day, `บิล/วัน ${plan.max_orders_per_day === -1 ? 'ไม่จำกัด' : `สูงสุด ${plan.max_orders_per_day} บิล`}`)}
-                {feat(plan.max_staff === -1 ? true : plan.max_staff > 0, `พนักงาน ${plan.max_staff === -1 ? 'ไม่จำกัด' : plan.max_staff > 0 ? `สูงสุด ${plan.max_staff} คน` : 'ไม่รองรับ'}`)}
                 {feat(plan.has_reports, 'รายงานยอดขาย')}
                 {feat(plan.has_profit_report, 'รายงานกำไร')}
                 {feat(plan.has_stock, 'จัดการสต็อก')}
