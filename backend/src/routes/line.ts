@@ -4,7 +4,7 @@ import { query, queryOne } from '../config/db.js'
 
 const router = Router()
 
-const middlewareConfig: line.middleware.MiddlewareConfig = {
+const middlewareConfig: line.MiddlewareConfig = {
   channelSecret: process.env.LINE_CHANNEL_SECRET || '',
 }
 
