@@ -4,9 +4,11 @@ import axios from 'axios'
 // (dev ปล่อยว่างไว้ ใช้ vite proxy แทน)
 const API_ORIGIN = (import.meta as any).env?.VITE_API_URL || ''
 
-// แปลง image_url เก่า (http://localhost:3100/uploads/...) → เต็ม URL ของ backend ปัจจุบัน
+// รูปใหม่มาจาก Vercel Blob เป็น URL เต็มอยู่แล้ว (เช่น https://xxx.public.blob.vercel-storage.com/...)
+// ส่วน /uploads/... คือรูปเก่า/โหมด local dev ที่ backend เขียนไฟล์ไว้เอง ต้องต่อ API_ORIGIN เข้าไปเอง
 export function imgUrl(url?: string | null): string | undefined {
   if (!url) return undefined
+  if (/^https?:\/\//.test(url)) return url
   if (url.startsWith('/uploads/')) return `${API_ORIGIN}${url}`
   const match = url.match(/\/uploads\/.+/)
   return match ? `${API_ORIGIN}${match[0]}` : url
