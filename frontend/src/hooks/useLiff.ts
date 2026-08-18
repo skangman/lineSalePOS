@@ -59,10 +59,10 @@ export function useLiff() {
 
         await liff.init({ liffId: LIFF_ID })
 
-        // ยังไม่ login → เด้งไปหน้า login ของ LINE ทันทีเสมอ ไม่ว่าจะเปิดจากในแอป LINE
-        // หรือเบราว์เซอร์ภายนอกก็ตาม (ไม่โชว์หน้ากดปุ่มเอง)
+        // ยังไม่ login → โชว์หน้า "เข้าสู่ระบบด้วย LINE" ค้างไว้ก่อน ให้กดปุ่มเอง
+        // (ปุ่มเรียก login() ด้านบน ซึ่งจะ liff.login() ต่อ)
         if (!liff.isLoggedIn()) {
-          liff.login()
+          setState({ isReady: true, isLoggedIn: false, profile: null, error: null })
           return
         }
 
